@@ -19,6 +19,7 @@ target_sources(${PROJECT_NAME}
         src/main.cpp    
         src/application.cpp
         src/glfw_window.cpp
+        src/rendering/shader.cpp
         thirdparty/glad/src/glad.c
 )
 
