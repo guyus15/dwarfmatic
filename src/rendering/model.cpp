@@ -1,6 +1,8 @@
 #include "model.h"
 
 #include "glad/glad.h"
+
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
 #include <iostream>
@@ -24,14 +26,13 @@ void Model::Load(const std::string& path)
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_ALLOW_SHARED || !scene->mRootNode)
     {
         std::cerr << "Error: Failed to import model.\n" << importer.GetErrorString() << "\n";
-    } else
+    }
+    else
     {
         std::cout << "Success: Loaded model " << path << ".\n";
+        m_directory = path.substr(0, path.find_last_of('/'));
+        ProcessNode(scene->mRootNode, scene);
     }
-
-    m_directory = path.substr(0, path.find_last_of('/'));
-
-    ProcessNode(scene->mRootNode, scene);
 }
 
 void Model::Draw(const Shader& shader) const
