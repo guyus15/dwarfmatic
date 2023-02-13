@@ -1,5 +1,4 @@
 #include "mesh.h"
-#include "utils/gl_debug.h"
 
 #include "glad/glad.h"
 

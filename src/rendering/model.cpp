@@ -1,5 +1,4 @@
 #include "model.h"
-#include "utils/gl_debug.h"
 
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
