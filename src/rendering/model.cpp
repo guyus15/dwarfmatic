@@ -1,9 +1,10 @@
 #include "model.h"
+#include "utils/gl_debug.h"
 
 #include "glad/glad.h"
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
+#include "assimp/postprocess.h"
 
 #include <iostream>
 
@@ -11,8 +12,6 @@ static unsigned int TextureFromFile(const std::string& path, const std::string& 
 
 void Model::Load(const std::string& path)
 {
-    stbi_set_flip_vertically_on_load(true);
-
     Assimp::Importer importer;
 
     const aiScene* scene = importer.ReadFile(
@@ -23,7 +22,7 @@ void Model::Load(const std::string& path)
         aiProcess_CalcTangentSpace
     );
 
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_ALLOW_SHARED || !scene->mRootNode)
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::cerr << "Error: Failed to import model.\n" << importer.GetErrorString() << "\n";
     }
@@ -187,13 +186,19 @@ unsigned int TextureFromFile(const std::string& path, const std::string& directo
         if (nr_components == 1)
         {
             format = GL_RED;
-        } else if (nr_components == 3)
+        }
+        else if (nr_components == 3)
         {
             format = GL_RGB;
-        } else if (nr_components == 4)
+        }
+        else if (nr_components == 4)
         {
             format = GL_RGBA;
         }
+
+        glBindTexture(GL_TEXTURE_2D, texture_id);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

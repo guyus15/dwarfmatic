@@ -1,4 +1,5 @@
 #include "mesh.h"
+#include "utils/gl_debug.h"
 
 #include "glad/glad.h"
 
@@ -28,7 +29,7 @@ void Mesh::Draw(const Shader& shader) const
 
         if (name == "texture_diffuse")
         {
-            number = std::to_string(specular_nr++);
+            number = std::to_string(diffuse_nr++);
         }
         else if (name == "texture_specular")
         {
@@ -43,11 +44,9 @@ void Mesh::Draw(const Shader& shader) const
             number = std::to_string(height_nr++);
         }
 
-        shader.SetInt((name + number), i);
+        shader.SetInt(name + number, static_cast<int>(i));
         glBindTexture(GL_TEXTURE_2D, m_textures[i].id);
     }
-
-    glActiveTexture(GL_TEXTURE0);
 
     // Draw mesh
     glBindVertexArray(m_vao);
@@ -65,11 +64,14 @@ void Mesh::SetupMesh()
     glBindVertexArray(m_vao);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), m_vertices.data(), GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
 
     // Vertex positions
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), static_cast<void*>(nullptr));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
 
     // Vertex normals
     glEnableVertexAttribArray(1);

@@ -4,6 +4,7 @@ project(Dwarfmatic VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY out)
 
 # glfw
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "GLFW build documentation" FORCE)
@@ -27,15 +28,18 @@ target_sources(${PROJECT_NAME}
         src/main.cpp    
         src/application.cpp
         src/glfw_window.cpp
+        src/resource_manager.cpp
         src/rendering/mesh.cpp
         src/rendering/model.cpp
         src/rendering/shader.cpp
-        src/rendering/texture.cpp
+        src/rendering/texture2d.cpp
+        src/utils/gl_debug.cpp
         thirdparty/glad/src/glad.c
 )
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
+        src/
         thirdparty/glad/include
         thirdparty/glfw/include
         thirdparty/glm
@@ -46,3 +50,12 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE assimp)
+
+add_custom_target(copy_resources ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${PROJECT_SOURCE_DIR}/resources
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
+    COMMENT "Copying resources into build directory"
+)
+
+add_dependencies(${PROJECT_NAME} copy_resources)

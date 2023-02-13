@@ -17,6 +17,7 @@ public:
 
     void Generate(int width, int height, unsigned char* data);
     void Bind() const;
+    void EnableAlpha(bool enable);
 
 private:
     GLuint m_id;

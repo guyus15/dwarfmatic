@@ -1,6 +1,7 @@
-#include "texture.h"
+#include "texture2d.h"
 
 #include <iostream>
+#include "texture2d.h"
 
 Texture2D::Texture2D()
     : m_id{},
@@ -52,4 +53,18 @@ void Texture2D::Generate(const int width, const int height, unsigned char* data)
 void Texture2D::Bind() const
 {
     glBindTexture(GL_TEXTURE_2D, m_id);
+}
+
+void Texture2D::EnableAlpha(bool enable)
+{
+    if (enable)
+    {
+        m_internal_format = GL_RGBA;
+        m_image_format = GL_RGBA;
+    }
+    else
+    {
+        m_internal_format = GL_RGB;
+        m_image_format = GL_RGB;
+    }
 }

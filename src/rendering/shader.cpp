@@ -1,4 +1,5 @@
 #include "shader.h"
+#include "utils/gl_debug.h"
 
 #include "glm/gtc/type_ptr.hpp"
 
@@ -58,7 +59,6 @@ void Shader::Compile(const std::string& vertex_shader_code, const std::string& f
 
     glDeleteShader(vertex_shader);
     glDeleteShader(fragment_shader);
-
 }
 
 void Shader::Use() const
