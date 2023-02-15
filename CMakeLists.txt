@@ -34,6 +34,7 @@ target_sources(${PROJECT_NAME}
         src/rendering/shader.cpp
         src/rendering/texture2d.cpp
         src/utils/gl_debug.cpp
+        src/utils/logging.cpp
         thirdparty/glad/src/glad.c
 )
 
@@ -46,6 +47,7 @@ target_include_directories(${PROJECT_NAME}
         thirdparty/assimp/include
         ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/assimp/include
         thirdparty/stb/include
+        thirdparty/spdlog/include
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw ${GLFW_LIBRARIES})
