@@ -1,7 +1,5 @@
 #include "texture2d.h"
-
-#include <iostream>
-#include "texture2d.h"
+#include "utils/logging.h"
 
 Texture2D::Texture2D()
     : m_id{},
@@ -21,7 +19,7 @@ Texture2D::~Texture2D()
     glDeleteTextures(1, &m_id);
 }
 
-void Texture2D::Generate(const int width, const int height, unsigned char* data)
+void Texture2D::Generate(const int width, const int height, const unsigned char* data)
 {
     glGenTextures(1, &m_id);
     glBindTexture(GL_TEXTURE_2D, m_id);
@@ -40,7 +38,7 @@ void Texture2D::Generate(const int width, const int height, unsigned char* data)
     }
     else
     {
-        std::cerr << "Error: Failed to generate texture.\n";
+        DFM_CORE_ERROR("Failed to generate texture.");
         return;
     }
 
@@ -55,7 +53,7 @@ void Texture2D::Bind() const
     glBindTexture(GL_TEXTURE_2D, m_id);
 }
 
-void Texture2D::EnableAlpha(bool enable)
+void Texture2D::EnableAlpha(const bool enable)
 {
     if (enable)
     {

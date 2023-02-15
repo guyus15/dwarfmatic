@@ -1,6 +1,6 @@
 #include "utils/gl_debug.h"
+#include "utils/logging.h"
 
-#include <iostream>
 #include <string>
 
 GLenum GL_CheckError(const char* file, int line)
@@ -36,7 +36,7 @@ GLenum GL_CheckError(const char* file, int line)
             break;
         }
 
-        std::cerr << "OpenGL error: " << error_text << ". '" << file << " @ " << line << "\n";
+        DFM_CORE_ERROR("OpenGL error: {0}. {1} @ {2}.", error_text, file, line);
     }
 
     return error_code;

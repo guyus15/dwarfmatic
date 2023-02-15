@@ -2,6 +2,7 @@
 #include "rendering/shader.h"
 #include "rendering/model.h"
 #include "resource_manager.h"
+#include "utils/logging.h"
 
 #include <stdexcept>
 
@@ -20,6 +21,9 @@ Application::~Application()
 
 void Application::Initialise()
 {
+    // Initialise logging
+    Logging::Initialise();
+
     // Initialise GLFW.
     if (!glfwInit())
     {
@@ -41,6 +45,8 @@ void Application::Initialise()
 
     const auto [width, height] = m_window->GetDimensions();
     glViewport(0, 0, width, height);
+
+    DFM_CORE_INFO("Application initialised");
 }
 
 void Application::Run() const
