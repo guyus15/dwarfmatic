@@ -15,7 +15,7 @@ public:
     Texture2D& operator=(const Texture2D&) = default;
     Texture2D& operator=(Texture2D&&) noexcept = default;
 
-    void Generate(int width, int height, unsigned char* data);
+    void Generate(int width, int height, const unsigned char* data);
     void Bind() const;
     void EnableAlpha(bool enable);
 

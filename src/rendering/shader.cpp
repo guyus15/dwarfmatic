@@ -1,4 +1,5 @@
 #include "shader.h"
+#include "utils/logging.h"
 
 #include "glm/gtc/type_ptr.hpp"
 
@@ -30,14 +31,14 @@ void Shader::Compile(const std::string& vertex_shader_code, const std::string& f
     if (!success)
     {
         glGetShaderInfoLog(vertex_shader, 512, nullptr, info_log);
-        std::cerr << "Error: Vertex shader compilation failed.\n" << info_log << "\n";
+        DFM_CORE_ERROR("Failed to compile vertex shader.\n{0}", info_log);
     }
 
     glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
     if (!success)
     {
         glGetShaderInfoLog(fragment_shader, 512, nullptr, info_log);
-        std::cerr << "Error: Fragment shader compilation failed.\n" << info_log << "\n";
+        DFM_CORE_ERROR("Failed to compile fragment shader.\n{0}", info_log);
     }
 
     m_id = glCreateProgram();
@@ -50,7 +51,7 @@ void Shader::Compile(const std::string& vertex_shader_code, const std::string& f
     if (!success)
     {
         glGetProgramInfoLog(m_id, 512, nullptr, info_log);
-        std::cerr << "Error: Failed link shader program.\n" << info_log << "\n";
+        DFM_CORE_ERROR("Failed to link shader program.\n{0}", info_log);
     } else
     {
         m_compiled = true;
@@ -64,7 +65,7 @@ void Shader::Use() const
 {
     if (!m_compiled)
     {
-        std::cerr << "Error: Shader has not been compiled successfully.\n";
+        DFM_CORE_ERROR("Failed to use uncompiled shader.");
         return;
     }
 

@@ -1,4 +1,5 @@
 #include "resource_manager.h"
+#include "utils/logging.h"
 
 #include "stb/stb_image.h"
 
@@ -56,7 +57,7 @@ Shader ResourceManager::LoadShaderFromFile(const std::string& vertex_shader_path
     }
     catch (std::ifstream::failure& e)
     {
-        std::cerr << "Error:: Shader file could not be read successfully." << std::endl;
+        DFM_CORE_ERROR("Failed to read shader file.");
     }
 
     Shader shader{};

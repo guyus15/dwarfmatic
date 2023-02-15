@@ -1,4 +1,5 @@
 #include "model.h"
+#include "utils/logging.h"
 
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -23,11 +24,11 @@ void Model::Load(const std::string& path)
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
-        std::cerr << "Error: Failed to import model.\n" << importer.GetErrorString() << "\n";
+        DFM_CORE_ERROR("Failed to import model: '{0}'.\n{1}", path, importer.GetErrorString());
     }
     else
     {
-        std::cout << "Success: Loaded model " << path << ".\n";
+        DFM_CORE_INFO("Successfully loaded model: '{0}'.", path);
         m_directory = path.substr(0, path.find_last_of('/'));
         ProcessNode(scene->mRootNode, scene);
     }
@@ -208,7 +209,7 @@ unsigned int TextureFromFile(const std::string& path, const std::string& directo
     }
     else
     {
-        std::cerr << "Error: Failed to load texture at path: " << path << "\n";
+        DFM_CORE_ERROR("Failure to load texture: '{0}'.", path);
         stbi_image_free(data);
     }
 
