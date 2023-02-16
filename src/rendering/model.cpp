@@ -80,7 +80,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
             vector3.x = mesh->mNormals[i].x;
             vector3.y = mesh->mNormals[i].y;
             vector3.z = mesh->mNormals[i].z;
-            vertex.texture_coordinate = vector3;
+            vertex.normal = vector3;
         }
 
         if (mesh->mTextureCoords[0])

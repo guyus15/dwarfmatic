@@ -53,21 +53,22 @@ void Application::Run() const
 {
     const Shader shader = ResourceManager::LoadShader("model_shader", "resources/shaders/model_vertex.glsl", "resources/shaders/model_fragment.glsl");
     shader.Use();
+    shader.SetVec3("light_colour", glm::vec3{ 1.0f, 1.0f, 1.0f });
+    shader.SetVec3("light_pos", glm::vec3{ 1.2f, 1.0f, 2.0f });
+    shader.SetVec3("view_pos", glm::vec3{ 0.0f, 0.0f, 10.0f });
 
-    Model wizard_model{};
-    wizard_model.Load("resources/models/cube/cube.fbx");
+    Model cube_model{};
+    cube_model.Load("resources/models/cube/cube.fbx");
 
     glEnable(GL_DEPTH_TEST);
 
     while (!m_window->ShouldClose())
     {
         glm::mat4 model{ 1.0f };
-        model = glm::scale(model, glm::vec3{ 0.01f, 0.01f, 0.01f });
-        model = glm::rotate(model, glm::radians(static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
-        model = glm::translate(model, glm::vec3{ 0.0f, 0.0f, 0.0f });
+        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
 
         glm::mat4 view{ 1.0f };
-        view = glm::lookAt(glm::vec3{ 0.0f, 0.0f, 10.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
+        view = glm::lookAt(glm::vec3{ 0.0f, 0.0f, 7.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
 
         glm::mat4 projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
 
@@ -78,7 +79,7 @@ void Application::Run() const
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        wizard_model.Draw(shader);
+        cube_model.Draw(shader);
 
         glfwPollEvents();
         m_window->SwapBuffers();
