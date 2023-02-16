@@ -1,13 +1,16 @@
 #include "application.h"
-#include "rendering/shader.h"
-#include "rendering/model.h"
 #include "resource_manager.h"
+#include "ubo.h"
+#include "rendering/camera.h"
+#include "rendering/model.h"
+#include "rendering/point_light.h"
+#include "rendering/shader.h"
 #include "utils/logging.h"
 
 #include <stdexcept>
 
-#include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 Application::Application()
 {
@@ -53,12 +56,20 @@ void Application::Run() const
 {
     const Shader shader = ResourceManager::LoadShader("model_shader", "resources/shaders/model_vertex.glsl", "resources/shaders/model_fragment.glsl");
     shader.Use();
-    shader.SetVec3("light_colour", glm::vec3{ 1.0f, 1.0f, 1.0f });
-    shader.SetVec3("light_pos", glm::vec3{ 1.2f, 1.0f, 2.0f });
-    shader.SetVec3("view_pos", glm::vec3{ 0.0f, 0.0f, 10.0f });
 
     Model cube_model{};
     cube_model.Load("resources/models/cube/cube.fbx");
+
+    Ubo matrices_ubo{ "Matrices", 2 * sizeof(glm::mat4) };
+    matrices_ubo.BindShaderBlock(shader);
+    matrices_ubo.Create();
+
+    Camera camera{ { 0.0f, 0.0f, 7.0f }, { 0.0f, 0.0f, 0.0f }, matrices_ubo };
+
+    PointLight light{ { 1.2f, 1.0f, 2.0f }, { 1.0f, 1.0f, 1.0f } };
+    shader.SetVec3("light_pos", light.GetPosition());
+    shader.SetVec3("light_colour", light.GetColour());
+    shader.SetVec3("view_pos", camera.GetPosition());
 
     glEnable(GL_DEPTH_TEST);
 
@@ -67,14 +78,7 @@ void Application::Run() const
         glm::mat4 model{ 1.0f };
         model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
 
-        glm::mat4 view{ 1.0f };
-        view = glm::lookAt(glm::vec3{ 0.0f, 0.0f, 7.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
-
-        glm::mat4 projection = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
-
         shader.SetMat4("model", model);
-        shader.SetMat4("view", view);
-        shader.SetMat4("projection", projection);
 
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
