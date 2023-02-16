@@ -20,8 +20,6 @@ public:
     void SetVec3(const std::string& name, const glm::vec3& value) const;
     void SetMat4(const std::string& name, glm::mat4& value) const;
 
-    [[nodiscard]] GLint GetId() const;
-
 private:
     GLint m_id;
     bool m_compiled;

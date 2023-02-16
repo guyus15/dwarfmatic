@@ -28,14 +28,11 @@ target_sources(${PROJECT_NAME}
         src/main.cpp    
         src/application.cpp
         src/glfw_window.cpp
-        src/ubo.cpp
         src/resource_manager.cpp
-        src/rendering/camera.cpp
         src/rendering/mesh.cpp
         src/rendering/model.cpp
         src/rendering/shader.cpp
         src/rendering/texture2d.cpp
-        src/rendering/point_light.cpp
         src/utils/gl_debug.cpp
         src/utils/logging.cpp
         thirdparty/glad/src/glad.c
