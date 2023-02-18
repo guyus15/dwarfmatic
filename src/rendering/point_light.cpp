@@ -1,38 +1,32 @@
 #include "point_light.h"
+#include "ubo.h"
+#include "utils/logging.h"
 
-constexpr float DEFAULT_AMBIENT_STRENGTH = 0.2f;
-constexpr float DEFAULT_SPECULAR_STRENGTH = 0.5f;
+constexpr int POINT_LIGHTS_SIZE_OFFSET = sizeof(glm::vec3);
+constexpr int POINT_LIGHTS_ARRAY_OFFSET = POINT_LIGHTS_SIZE_OFFSET + sizeof(int);
 
-PointLight::PointLight(const glm::vec3& position, const glm::vec3& colour)
-    : m_position{ position },
-    m_view_position{},
-    m_colour{ colour },
-    m_ambient_strength{ DEFAULT_AMBIENT_STRENGTH },
-    m_specular_strength{ DEFAULT_SPECULAR_STRENGTH }
+unsigned int PointLight::s_index = 0;
+
+PointLight::PointLight(PointLightData data)
+    : m_data{ data },
+    m_index{ s_index }
 {
+    s_index++;
+
+    Initialise();
 }
 
-void PointLight::SetViewPosition(const glm::vec3& view_position)
+PointLightData& PointLight::GetData()
 {
-    m_view_position = view_position;
+    return m_data;
 }
 
-void PointLight::SetAmbientStrength(const float ambient_strength)
+void PointLight::Initialise() const
 {
-    m_ambient_strength = ambient_strength;
-}
+    const Ubo& lighting_ubo = UboManager::Retrieve("lighting");
 
-void PointLight::SetSpecularStrength(const float specular_strength)
-{
-    m_specular_strength = specular_strength;
-}
+    const size_t point_lights_size = s_index;
 
-glm::vec3 PointLight::GetPosition() const
-{
-    return m_position;
-}
-
-glm::vec3 PointLight::GetColour() const
-{
-    return m_colour;
+    lighting_ubo.SetSubData(POINT_LIGHTS_SIZE_OFFSET, sizeof(int), &point_lights_size);
+    lighting_ubo.SetSubData(POINT_LIGHTS_ARRAY_OFFSET + sizeof(PointLightData) * m_index, sizeof(PointLightData), &m_data);
 }

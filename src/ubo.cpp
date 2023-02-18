@@ -2,12 +2,20 @@
 
 unsigned int Ubo::s_binding_point = 0;
 
-Ubo::Ubo(std::string block_name, const size_t size)
-    : m_block_name{ std::move(block_name) },
+Ubo::Ubo()
+    : m_block_name{},
     m_id{ 0 },
-    m_binding_point{ s_binding_point },
-    m_size{ size }
+    m_binding_point{ 0 },
+    m_size{ 0 }
 {
+}
+
+void Ubo::Configure(std::string block_name, const size_t size)
+{
+    m_block_name = std::move(block_name);
+    m_binding_point = s_binding_point;
+    m_size = size;
+
     s_binding_point++;
 }
 
@@ -31,7 +39,7 @@ void Ubo::Create()
     glBindBufferRange(GL_UNIFORM_BUFFER, m_binding_point, m_id, 0, m_size);
 }
 
-void Ubo::SetSubData(const int offset, const size_t size, const void* data) const
+void Ubo::SetSubData(const unsigned int offset, const size_t size, const void* data) const
 {
     Bind();
     glBufferSubData(GL_UNIFORM_BUFFER, offset, static_cast<GLsizeiptr>(size), data);
@@ -51,4 +59,16 @@ void Ubo::Unbind()
 unsigned int Ubo::GetId() const
 {
     return m_id;
+}
+
+UboManager UboManager::s_instance;
+
+void UboManager::Register(const std::string& name, const Ubo& ubo)
+{
+    Get().m_registered_ubos[name] = ubo;
+}
+
+Ubo& UboManager::Retrieve(const std::string& name)
+{
+    return Get().m_registered_ubos[name];
 }

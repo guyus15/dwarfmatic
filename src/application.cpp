@@ -2,6 +2,7 @@
 #include "resource_manager.h"
 #include "ubo.h"
 #include "rendering/camera.h"
+#include "rendering/camera_manager.h"
 #include "rendering/model.h"
 #include "rendering/point_light.h"
 #include "rendering/shader.h"
@@ -49,27 +50,49 @@ void Application::Initialise()
     const auto [width, height] = m_window->GetDimensions();
     glViewport(0, 0, width, height);
 
+    // Load shaders
+    const Shader shader = ResourceManager::LoadShader("model_shader", "resources/shaders/model_vertex.glsl", "resources/shaders/model_fragment.glsl");
+
+    // Create UBOs
+    Ubo matrices_ubo;
+    matrices_ubo.Configure("Matrices", 2 * sizeof(glm::mat4));
+    matrices_ubo.BindShaderBlock(shader);
+    matrices_ubo.Create();
+    UboManager::Register("matrices", matrices_ubo);
+
+    Ubo lighting_ubo;
+    lighting_ubo.Configure("Lighting", sizeof(int) + sizeof(PointLightData) * 128 + sizeof(glm::vec3) * 5);
+    lighting_ubo.BindShaderBlock(shader);
+    lighting_ubo.Create();
+    UboManager::Register("lighting", lighting_ubo);
+
+    // Initialise Cameras
+    CameraManager::Initialise();
+
     DFM_CORE_INFO("Application initialised");
 }
 
 void Application::Run() const
 {
-    const Shader shader = ResourceManager::LoadShader("model_shader", "resources/shaders/model_vertex.glsl", "resources/shaders/model_fragment.glsl");
+    const Shader shader = ResourceManager::GetShader("model_shader");
     shader.Use();
 
     Model cube_model{};
     cube_model.Load("resources/models/cube/cube.fbx");
 
-    Ubo matrices_ubo{ "Matrices", 2 * sizeof(glm::mat4) };
-    matrices_ubo.BindShaderBlock(shader);
-    matrices_ubo.Create();
+    Camera camera{ { 0.0f, 0.0f, 7.0f }, { 0.0f, 0.0f, 0.0f } };
 
-    Camera camera{ { 0.0f, 0.0f, 7.0f }, { 0.0f, 0.0f, 0.0f }, matrices_ubo };
+    PointLightData light_data{};
+    light_data.position = { 0.0f, 0.0f, 2.0f };
+    light_data.constant = 1.0f;
+    light_data.linear = 0.35f;
+    light_data.quadratic = 0.44f;
+    light_data.ambient = { 1.0f, 1.0f, 1.0f };
+    light_data.diffuse = { 1.0f, 1.0f, 1.0f };
+    light_data.specular = { 1.0f, 1.0f, 1.0f };
+    PointLight light{ light_data };
 
-    PointLight light{ { 1.2f, 1.0f, 2.0f }, { 1.0f, 1.0f, 1.0f } };
-    shader.SetVec3("light_pos", light.GetPosition());
-    shader.SetVec3("light_colour", light.GetColour());
-    shader.SetVec3("view_pos", camera.GetPosition());
+    // TODO: Look at why multiple lights arent working
 
     glEnable(GL_DEPTH_TEST);
 

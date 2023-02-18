@@ -31,6 +31,7 @@ target_sources(${PROJECT_NAME}
         src/ubo.cpp
         src/resource_manager.cpp
         src/rendering/camera.cpp
+        src/rendering/camera_manager.cpp
         src/rendering/mesh.cpp
         src/rendering/model.cpp
         src/rendering/shader.cpp

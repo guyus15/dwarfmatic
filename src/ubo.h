@@ -6,16 +6,17 @@
 #include "glad/glad.h"
 
 #include <string>
-#include <vector>
+#include <unordered_map>
 
 class Ubo
 {
 public:
-    Ubo(std::string block_name, size_t size);
+    Ubo();
 
+    void Configure(std::string block_name, size_t size);
     void BindShaderBlock(const Shader& shader);
     void Create();
-    void SetSubData(int offset, size_t size, const void* data) const;
+    void SetSubData(unsigned int offset, size_t size, const void* data) const;
 
     [[nodiscard]] unsigned int GetId() const;
 
@@ -30,6 +31,21 @@ private:
 
     static void Unbind();
     static unsigned int s_binding_point;
+};
+
+class UboManager
+{
+public:
+    static void Register(const std::string& name, const Ubo& ubo);
+    [[nodiscard]] static Ubo& Retrieve(const std::string& name);
+
+private:
+    std::unordered_map<std::string, Ubo> m_registered_ubos;
+
+    UboManager() = default;
+
+    static UboManager& Get() { return s_instance; }
+    static UboManager s_instance;
 };
 
 #endif // UBO_H
