@@ -5,13 +5,13 @@
 
 struct PointLightData
 {
-    glm::vec3 position;
+    alignas(16) glm::vec3 position;
     float constant;
     float linear;
     float quadratic;
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
+    alignas(16) glm::vec3 ambient;
+    alignas(16) glm::vec3 diffuse;
+    alignas(16) glm::vec3 specular;
 };
 
 class PointLight

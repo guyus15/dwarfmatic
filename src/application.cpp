@@ -83,12 +83,12 @@ void Application::Run() const
     Camera camera{ { 0.0f, 0.0f, 7.0f }, { 0.0f, 0.0f, 0.0f } };
 
     PointLightData light_data{};
-    light_data.position = { 0.0f, 0.0f, 2.0f };
+    light_data.position = { -0.5f, 0.0f, 2.0f };
     light_data.constant = 1.0f;
-    light_data.linear = 0.35f;
-    light_data.quadratic = 0.44f;
-    light_data.ambient = { 1.0f, 1.0f, 1.0f };
-    light_data.diffuse = { 1.0f, 1.0f, 1.0f };
+    light_data.linear = 0.14f;
+    light_data.quadratic = 0.07f;
+    light_data.ambient = { 0.3f, 0.3f, 0.3f };
+    light_data.diffuse = { 0.8f, 0.8f, 0.8f };
     light_data.specular = { 1.0f, 1.0f, 1.0f };
     PointLight light{ light_data };
 
