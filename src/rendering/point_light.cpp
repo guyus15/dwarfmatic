@@ -1,9 +1,9 @@
-#include "point_light.h"
+#include "lighting.h"
 #include "ubo.h"
 #include "utils/logging.h"
 
-constexpr int POINT_LIGHTS_SIZE_OFFSET = sizeof(glm::vec3);
-constexpr int POINT_LIGHTS_ARRAY_OFFSET = POINT_LIGHTS_SIZE_OFFSET + sizeof(int);
+constexpr int POINT_LIGHTS_SIZE_OFFSET = offsetof(Lighting, point_lights_size);
+constexpr int POINT_LIGHTS_ARRAY_OFFSET = offsetof(Lighting, point_lights);
 
 unsigned int PointLight::s_index = 0;
 
@@ -27,6 +27,6 @@ void PointLight::Initialise() const
 
     const size_t point_lights_size = s_index;
 
-    lighting_ubo.SetSubData(POINT_LIGHTS_SIZE_OFFSET, sizeof(int), &point_lights_size);
+    lighting_ubo.SetSubData(POINT_LIGHTS_SIZE_OFFSET, sizeof(Lighting::point_lights_size), &point_lights_size);
     lighting_ubo.SetSubData(POINT_LIGHTS_ARRAY_OFFSET + sizeof(PointLightData) * m_index, sizeof(PointLightData), &m_data);
 }

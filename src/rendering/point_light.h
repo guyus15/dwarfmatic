@@ -1,17 +1,18 @@
 #ifndef POINT_LIGHT_H
 #define POINT_LIGHT_H
 
-#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
 
 struct PointLightData
 {
-    alignas(16) glm::vec3 position;
+    alignas(16) glm::vec4 position;
     float constant;
     float linear;
     float quadratic;
-    alignas(16) glm::vec3 ambient;
-    alignas(16) glm::vec3 diffuse;
-    alignas(16) glm::vec3 specular;
+    float padding;
+    alignas(16) glm::vec4 ambient;
+    alignas(16) glm::vec4 diffuse;
+    alignas(16) glm::vec4 specular;
 };
 
 class PointLight

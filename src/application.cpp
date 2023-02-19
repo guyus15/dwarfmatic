@@ -4,7 +4,7 @@
 #include "rendering/camera.h"
 #include "rendering/camera_manager.h"
 #include "rendering/model.h"
-#include "rendering/point_light.h"
+#include "rendering/lighting.h"
 #include "rendering/shader.h"
 #include "utils/logging.h"
 
@@ -61,7 +61,7 @@ void Application::Initialise()
     UboManager::Register("matrices", matrices_ubo);
 
     Ubo lighting_ubo;
-    lighting_ubo.Configure("Lighting", sizeof(int) + sizeof(PointLightData) * 128 + sizeof(glm::vec3) * 5);
+    lighting_ubo.Configure("Lighting", sizeof(Lighting));
     lighting_ubo.BindShaderBlock(shader);
     lighting_ubo.Create();
     UboManager::Register("lighting", lighting_ubo);
@@ -83,16 +83,24 @@ void Application::Run() const
     Camera camera{ { 0.0f, 0.0f, 7.0f }, { 0.0f, 0.0f, 0.0f } };
 
     PointLightData light_data{};
-    light_data.position = { -0.5f, 0.0f, 2.0f };
+    light_data.position = { -0.5f, 0.0f, 2.0f, 0.0f };
     light_data.constant = 1.0f;
     light_data.linear = 0.14f;
     light_data.quadratic = 0.07f;
-    light_data.ambient = { 0.3f, 0.3f, 0.3f };
-    light_data.diffuse = { 0.8f, 0.8f, 0.8f };
-    light_data.specular = { 1.0f, 1.0f, 1.0f };
+    light_data.ambient = { 0.3f, 0.3f, 0.3f, 0.0f };
+    light_data.diffuse = { 0.8f, 0.8f, 0.8f, 0.0f, };
+    light_data.specular = { 1.0f, 1.0f, 1.0f, 0.0f };
     PointLight light{ light_data };
 
-    // TODO: Look at why multiple lights arent working
+    light_data.position = { 0.5f, 0.0f, 2.0f, 0.0f };
+    PointLight light2{ light_data };
+
+    DirectionalLightData d_light_data{};
+    d_light_data.direction = { 0.0f, 0.0f, 1.0f, 0.0f };
+    d_light_data.ambient = { 0.2f, 0.2f, 0.2f, 0.0f };
+    d_light_data.diffuse = { 0.5f, 0.5f, 0.5f, 0.0f };
+    d_light_data.specular = { 0.2f, 0.2f, 0.2f, 0.0f, };
+    DirectionalLight directional_light{ d_light_data };
 
     glEnable(GL_DEPTH_TEST);
 
