@@ -80,6 +80,9 @@ void Application::Run() const
     Model cube_model{};
     cube_model.Load("resources/models/cube/cube.fbx");
 
+    Model ball_model{};
+    ball_model.Load("resources/models/ball/ball.fbx");
+
     Camera camera{ { 0.0f, 0.0f, 7.0f }, { 0.0f, 0.0f, 0.0f } };
 
     PointLightData light_data{};
@@ -92,29 +95,50 @@ void Application::Run() const
     light_data.specular = { 1.0f, 1.0f, 1.0f, 0.0f };
     PointLight light{ light_data };
 
-    light_data.position = { 0.5f, 0.0f, 2.0f, 0.0f };
-    PointLight light2{ light_data };
-
     DirectionalLightData d_light_data{};
-    d_light_data.direction = { 0.0f, 0.0f, 1.0f, 0.0f };
-    d_light_data.ambient = { 0.2f, 0.2f, 0.2f, 0.0f };
-    d_light_data.diffuse = { 0.5f, 0.5f, 0.5f, 0.0f };
+    d_light_data.direction = { 3.0f, 0.0f, 1.0f, 0.0f };
+    d_light_data.ambient = { 0.1f, 0.1f, 0.1f, 0.0f };
+    d_light_data.diffuse = { 0.3f, 0.3f, 0.3f, 0.0f };
     d_light_data.specular = { 0.2f, 0.2f, 0.2f, 0.0f, };
     DirectionalLight directional_light{ d_light_data };
+
+    SpotLightData s_light_data{};
+    s_light_data.position = { 0.0f, 0.0f, 5.0f, 0.0f };
+    s_light_data.direction = { 0.0f, 0.0f, 1.0f, 0.0f };
+    s_light_data.constant = 1.0f;
+    s_light_data.linear = 0.14f;
+    s_light_data.quadratic = 0.07f;
+    s_light_data.inner_cut_off = glm::cos(glm::radians(20.0f));
+    s_light_data.outer_cut_off = glm::cos(glm::radians(25.0f));
+    s_light_data.ambient = { 0.3f, 0.3f, 0.3f, 0.0f };
+    s_light_data.diffuse = { 0.8f, 0.8f, 0.8f, 0.0f, };
+    s_light_data.specular = { 1.0f, 1.0f, 1.0f, 0.0f };
+    SpotLight spot_light{ s_light_data };
 
     glEnable(GL_DEPTH_TEST);
 
     while (!m_window->ShouldClose())
     {
-        glm::mat4 model{ 1.0f };
-        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
-
-        shader.SetMat4("model", model);
-
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        glm::mat4 model{ 1.0f };
+        model = glm::translate(model, glm::vec3{ -1.5f, 0.0f, 0.0f });
+        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
+        shader.SetMat4("model", model);
         cube_model.Draw(shader);
+
+        model = glm::mat4{ 1.0f };
+        model = glm::translate(model, glm::vec3{ 0.0f, 0.0f, -5.0f });
+        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
+        shader.SetMat4("model", model);
+        cube_model.Draw(shader);
+
+        model = glm::mat4{ 1.0f };
+        model = model = glm::translate(model, glm::vec3{ 1.5f, 0.0f, 0.0f });
+        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
+        shader.SetMat4("model", model);
+        ball_model.Draw(shader);
 
         glfwPollEvents();
         m_window->SwapBuffers();

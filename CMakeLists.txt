@@ -37,6 +37,7 @@ target_sources(${PROJECT_NAME}
         src/rendering/shader.cpp
         src/rendering/texture2d.cpp
         src/rendering/point_light.cpp
+        src/rendering/spot_light.cpp
         src/rendering/directional_light.cpp
         src/utils/gl_debug.cpp
         src/utils/logging.cpp
