@@ -42,7 +42,7 @@ private:
     Instrumentor();
     ~Instrumentor() = default;
 
-    static Instrumentor& Get() { return s_instance; };
+    static Instrumentor& Get() { return s_instance; }
     static Instrumentor s_instance;
 };
 
@@ -66,10 +66,10 @@ private:
     bool m_stopped;
 };
 
-#define PROFILING 1
-#if PROFILING
-#define DFM_PROFILE_SCOPE(name) InstrumentationTimer timer##__LINE__{name}
-#define DFM_PROFILE_FUNCTION(name) DFM_PROFILE_SCOPE(__FUNCSIG__)
+#define DFM_PROFILING 1
+#if DFM_PROFILING
+#define DFM_PROFILE_SCOPE(name) InstrumentationTimer timer##__LINE__{ name }
+#define DFM_PROFILE_FUNCTION() DFM_PROFILE_SCOPE(__FUNCSIG__)
 #define DFM_PROFILE_BEGIN_SESSION(name) Instrumentor::BeginSession(name)
 #define DFM_PROFILE_END_SESSION() Instrumentor::EndSession()
 #else

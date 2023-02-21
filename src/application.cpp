@@ -7,6 +7,7 @@
 #include "rendering/lighting.h"
 #include "rendering/shader.h"
 #include "utils/logging.h"
+#include "utils/profiling.h"
 
 #include <stdexcept>
 
@@ -15,16 +16,20 @@
 
 Application::Application()
 {
+    DFM_PROFILE_BEGIN_SESSION("Dwarfmatic");
     Initialise();
 }
 
 Application::~Application()
 {
     Dispose();
+    DFM_PROFILE_END_SESSION();
 }
 
 void Application::Initialise()
 {
+    DFM_PROFILE_FUNCTION();
+
     // Initialise logging
     Logging::Initialise();
 
@@ -69,11 +74,13 @@ void Application::Initialise()
     // Initialise Cameras
     CameraManager::Initialise();
 
-    DFM_CORE_INFO("Application initialised");
+    DFM_CORE_INFO("Application Initialisation");
 }
 
 void Application::Run() const
 {
+    DFM_PROFILE_FUNCTION();
+
     const Shader shader = ResourceManager::GetShader("model_shader");
     shader.Use();
 
@@ -147,5 +154,6 @@ void Application::Run() const
 
 void Application::Dispose()
 {
+    DFM_PROFILE_FUNCTION();
     glfwTerminate();
 }

@@ -14,7 +14,7 @@ void Instrumentor::BeginSession(const std::string& name, const std::string& file
 {
     Get().m_output_stream.open(filepath);
     WriteHeader();
-    Get().m_current_session = new InstrumentationSession;
+    Get().m_current_session = new InstrumentationSession{ name };
 }
 
 void Instrumentor::EndSession()
