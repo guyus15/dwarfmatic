@@ -62,7 +62,7 @@ public:
 
 private:
     const std::string m_name;
-    std::chrono::time_point<std::chrono::steady_clock> m_start_timepoint;
+    std::chrono::time_point<std::chrono::high_resolution_clock> m_start_timepoint;
     bool m_stopped;
 };
 

@@ -1,5 +1,6 @@
 #include "resource_manager.h"
 #include "utils/logging.h"
+#include "utils/profiling.h"
 
 #include "stb/stb_image.h"
 
@@ -11,28 +12,36 @@ ResourceManager ResourceManager::s_instance;
 
 Shader ResourceManager::LoadShader(const std::string& name, const std::string& vertex_shader_path, const std::string& fragment_shader_path)
 {
+    DFM_PROFILE_FUNCTION();
+
     Get().m_shaders[name] = LoadShaderFromFile(vertex_shader_path, fragment_shader_path);
     return Get().m_shaders[name];
 }
 
 Shader& ResourceManager::GetShader(const std::string& name)
 {
+    DFM_PROFILE_FUNCTION();
     return Get().m_shaders[name];
 }
 
 Texture2D ResourceManager::LoadTexture(const std::string& name, const std::string& path, bool alpha, bool flip_on_load)
 {
+    DFM_PROFILE_FUNCTION();
+
     Get().m_textures[name] = LoadTextureFromFile(path, alpha, flip_on_load);
     return Get().m_textures[name];
 }
 
 Texture2D ResourceManager::GetTexture(const std::string& name)
 {
+    DFM_PROFILE_FUNCTION();
     return Get().m_textures[name];
 }
 
 Shader ResourceManager::LoadShaderFromFile(const std::string& vertex_shader_path, const std::string& fragment_shader_path)
 {
+    DFM_PROFILE_FUNCTION();
+
     std::string vertex_code, fragment_code;
     std::ifstream vertex_shader_file, fragment_shader_file;
 
@@ -68,6 +77,8 @@ Shader ResourceManager::LoadShaderFromFile(const std::string& vertex_shader_path
 
 Texture2D ResourceManager::LoadTextureFromFile(const std::string& path, const bool alpha, const bool flip_on_load)
 {
+    DFM_PROFILE_FUNCTION();
+
     Texture2D texture;
 
     if (alpha)

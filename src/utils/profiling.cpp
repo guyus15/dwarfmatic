@@ -12,6 +12,7 @@ Instrumentor::Instrumentor()
 
 void Instrumentor::BeginSession(const std::string& name, const std::string& filepath)
 {
+
     Get().m_output_stream.open(filepath);
     WriteHeader();
     Get().m_current_session = new InstrumentationSession{ name };
@@ -28,7 +29,7 @@ void Instrumentor::EndSession()
 
 void Instrumentor::WriteProfile(const ProfileResult& result)
 {
-    if (Get().m_profile_count > 0)
+    if (Get().m_profile_count++ > 0)
     {
         Get().m_output_stream << ", ";
     }
@@ -64,6 +65,7 @@ void Instrumentor::WriteFooter()
 InstrumentationTimer::InstrumentationTimer(std::string name)
     : m_name{ std::move(name) }, m_stopped{ false }
 {
+    m_start_timepoint = std::chrono::high_resolution_clock::now();
 }
 
 InstrumentationTimer::~InstrumentationTimer()

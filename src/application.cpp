@@ -74,7 +74,7 @@ void Application::Initialise()
     // Initialise Cameras
     CameraManager::Initialise();
 
-    DFM_CORE_INFO("Application Initialisation");
+    DFM_CORE_INFO("Application initialised.");
 }
 
 void Application::Run() const
@@ -137,7 +137,7 @@ void Application::Run() const
 
         model = glm::mat4{ 1.0f };
         model = glm::translate(model, glm::vec3{ 0.0f, 0.0f, -5.0f });
-        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
+        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 15.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
         shader.SetMat4("model", model);
         cube_model.Draw(shader);
 

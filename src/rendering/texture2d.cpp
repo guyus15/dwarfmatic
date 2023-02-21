@@ -1,5 +1,6 @@
 #include "texture2d.h"
 #include "utils/logging.h"
+#include "utils/profiling.h"
 
 Texture2D::Texture2D()
     : m_id{},
@@ -16,11 +17,14 @@ Texture2D::Texture2D()
 
 Texture2D::~Texture2D()
 {
+    DFM_PROFILE_FUNCTION();
     glDeleteTextures(1, &m_id);
 }
 
 void Texture2D::Generate(const int width, const int height, const unsigned char* data)
 {
+    DFM_PROFILE_FUNCTION();
+
     glGenTextures(1, &m_id);
     glBindTexture(GL_TEXTURE_2D, m_id);
 
@@ -50,11 +54,15 @@ void Texture2D::Generate(const int width, const int height, const unsigned char*
 
 void Texture2D::Bind() const
 {
+    DFM_PROFILE_FUNCTION();
+
     glBindTexture(GL_TEXTURE_2D, m_id);
 }
 
 void Texture2D::EnableAlpha(const bool enable)
 {
+    DFM_PROFILE_FUNCTION();
+
     if (enable)
     {
         m_internal_format = GL_RGBA;
