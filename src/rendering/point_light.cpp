@@ -1,5 +1,6 @@
 #include "lighting.h"
 #include "ubo.h"
+#include "utils/profiling.h"
 
 constexpr int POINT_LIGHTS_SIZE_OFFSET = offsetof(Lighting, point_lights_size);
 constexpr int POINT_LIGHTS_ARRAY_OFFSET = offsetof(Lighting, point_lights);
@@ -22,6 +23,8 @@ PointLightData& PointLight::GetData()
 
 void PointLight::Initialise() const
 {
+    DFM_PROFILE_FUNCTION();
+
     const Ubo& lighting_ubo = UboManager::Retrieve("lighting");
     const size_t point_lights_size = s_index;
 

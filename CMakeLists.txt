@@ -41,6 +41,7 @@ target_sources(${PROJECT_NAME}
         src/rendering/directional_light.cpp
         src/utils/gl_debug.cpp
         src/utils/logging.cpp
+        src/utils/profiling.cpp
         thirdparty/glad/src/glad.c
 )
 

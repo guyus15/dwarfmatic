@@ -1,4 +1,5 @@
 #include "ubo.h"
+#include "utils/profiling.h"
 
 unsigned int Ubo::s_binding_point = 0;
 
@@ -12,6 +13,8 @@ Ubo::Ubo()
 
 void Ubo::Configure(std::string block_name, const size_t size)
 {
+    DFM_PROFILE_FUNCTION();
+
     m_block_name = std::move(block_name);
     m_binding_point = s_binding_point;
     m_size = size;
@@ -21,6 +24,8 @@ void Ubo::Configure(std::string block_name, const size_t size)
 
 void Ubo::BindShaderBlock(const Shader& shader)
 {
+    DFM_PROFILE_FUNCTION();
+
     const GLint shader_id = shader.GetId();
     const unsigned int uniform_block_index = glGetUniformBlockIndex(shader_id, m_block_name.c_str());
     glUniformBlockBinding(shader_id, uniform_block_index, m_binding_point);
@@ -30,6 +35,8 @@ void Ubo::BindShaderBlock(const Shader& shader)
 
 void Ubo::Create()
 {
+    DFM_PROFILE_FUNCTION();
+
     glGenBuffers(1, &m_id);
 
     Bind();
@@ -41,6 +48,8 @@ void Ubo::Create()
 
 void Ubo::SetSubData(const unsigned int offset, const size_t size, const void* data) const
 {
+    DFM_PROFILE_FUNCTION();
+
     Bind();
     glBufferSubData(GL_UNIFORM_BUFFER, offset, static_cast<GLsizeiptr>(size), data);
     Unbind();
@@ -48,11 +57,13 @@ void Ubo::SetSubData(const unsigned int offset, const size_t size, const void* d
 
 void Ubo::Bind() const
 {
+    DFM_PROFILE_FUNCTION();
     glBindBuffer(GL_UNIFORM_BUFFER, m_id);
 }
 
 void Ubo::Unbind()
 {
+    DFM_PROFILE_FUNCTION();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
@@ -65,10 +76,12 @@ UboManager UboManager::s_instance;
 
 void UboManager::Register(const std::string& name, const Ubo& ubo)
 {
+    DFM_PROFILE_FUNCTION();
     Get().m_registered_ubos[name] = ubo;
 }
 
 Ubo& UboManager::Retrieve(const std::string& name)
 {
+    DFM_PROFILE_FUNCTION();
     return Get().m_registered_ubos[name];
 }

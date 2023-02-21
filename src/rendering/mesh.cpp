@@ -1,4 +1,5 @@
 #include "mesh.h"
+#include "utils/profiling.h"
 
 #include "glad/glad.h"
 
@@ -13,6 +14,8 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vec
 
 void Mesh::Draw(const Shader& shader) const
 {
+    DFM_PROFILE_FUNCTION();
+
     unsigned int diffuse_nr = 1;
     unsigned int specular_nr = 1;
     unsigned int normal_nr = 1;
@@ -56,6 +59,8 @@ void Mesh::Draw(const Shader& shader) const
 
 void Mesh::SetupMesh()
 {
+    DFM_PROFILE_FUNCTION();
+
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
     glGenBuffers(1, &m_ebo);

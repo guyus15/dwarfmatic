@@ -7,6 +7,7 @@
 #include "rendering/lighting.h"
 #include "rendering/shader.h"
 #include "utils/logging.h"
+#include "utils/profiling.h"
 
 #include <stdexcept>
 
@@ -15,16 +16,20 @@
 
 Application::Application()
 {
+    DFM_PROFILE_BEGIN_SESSION("Dwarfmatic");
     Initialise();
 }
 
 Application::~Application()
 {
     Dispose();
+    DFM_PROFILE_END_SESSION();
 }
 
 void Application::Initialise()
 {
+    DFM_PROFILE_FUNCTION();
+
     // Initialise logging
     Logging::Initialise();
 
@@ -69,11 +74,13 @@ void Application::Initialise()
     // Initialise Cameras
     CameraManager::Initialise();
 
-    DFM_CORE_INFO("Application initialised");
+    DFM_CORE_INFO("Application initialised.");
 }
 
 void Application::Run() const
 {
+    DFM_PROFILE_FUNCTION();
+
     const Shader shader = ResourceManager::GetShader("model_shader");
     shader.Use();
 
@@ -130,7 +137,7 @@ void Application::Run() const
 
         model = glm::mat4{ 1.0f };
         model = glm::translate(model, glm::vec3{ 0.0f, 0.0f, -5.0f });
-        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
+        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 15.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
         shader.SetMat4("model", model);
         cube_model.Draw(shader);
 
@@ -147,5 +154,6 @@ void Application::Run() const
 
 void Application::Dispose()
 {
+    DFM_PROFILE_FUNCTION();
     glfwTerminate();
 }

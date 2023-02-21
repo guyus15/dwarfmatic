@@ -1,5 +1,6 @@
 #include "model.h"
 #include "utils/logging.h"
+#include "utils/profiling.h"
 
 #include "glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -12,6 +13,8 @@ static unsigned int TextureFromFile(const std::string& path, const std::string& 
 
 void Model::Load(const std::string& path)
 {
+    DFM_PROFILE_FUNCTION();
+
     Assimp::Importer importer;
 
     const aiScene* scene = importer.ReadFile(
@@ -36,6 +39,8 @@ void Model::Load(const std::string& path)
 
 void Model::Draw(const Shader& shader) const
 {
+    DFM_PROFILE_FUNCTION();
+
     for (const auto& mesh : m_meshes)
     {
         mesh.Draw(shader);
@@ -44,6 +49,8 @@ void Model::Draw(const Shader& shader) const
 
 void Model::ProcessNode(const aiNode* node, const aiScene* scene)
 {
+    DFM_PROFILE_FUNCTION();
+
     // Process all the node's meshes (if any)
     for (unsigned int i = 0; i < node->mNumMeshes; i++)
     {
@@ -60,6 +67,8 @@ void Model::ProcessNode(const aiNode* node, const aiScene* scene)
 
 Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
+    DFM_PROFILE_FUNCTION();
+
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<MeshTexture> textures;
@@ -133,6 +142,8 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 std::vector<MeshTexture> Model::LoadMaterialTextures(const aiMaterial* material, const aiTextureType type,
                                                      const std::string& type_name)
 {
+    DFM_PROFILE_FUNCTION();
+
     std::vector<MeshTexture> textures;
 
     for (unsigned int i = 0; i < material->GetTextureCount(type); i++)
@@ -169,6 +180,8 @@ std::vector<MeshTexture> Model::LoadMaterialTextures(const aiMaterial* material,
 
 unsigned int TextureFromFile(const std::string& path, const std::string& directory)
 {
+    DFM_PROFILE_FUNCTION();
+
     // TODO: Convert texture usage to Texture2D implementation.
 
     std::string filename = path;

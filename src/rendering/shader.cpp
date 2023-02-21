@@ -1,5 +1,6 @@
 #include "shader.h"
 #include "utils/logging.h"
+#include "utils/profiling.h"
 
 #include "glm/gtc/type_ptr.hpp"
 
@@ -12,6 +13,8 @@ Shader::Shader()
 
 void Shader::Compile(const std::string& vertex_shader_code, const std::string& fragment_shader_code)
 {
+    DFM_PROFILE_FUNCTION();
+
     const char* vertex_code_c = vertex_shader_code.c_str();
     const char* fragment_code_c = fragment_shader_code.c_str();
 
@@ -63,6 +66,8 @@ void Shader::Compile(const std::string& vertex_shader_code, const std::string& f
 
 void Shader::Use() const
 {
+    DFM_PROFILE_FUNCTION();
+
     if (!m_compiled)
     {
         DFM_CORE_ERROR("Failed to use uncompiled shader.");
@@ -74,31 +79,37 @@ void Shader::Use() const
 
 void Shader::SetBool(const std::string& name, const bool value) const
 {
+    DFM_PROFILE_FUNCTION();
     glUniform1i(glGetUniformLocation(m_id, name.c_str()), static_cast<int>(value));
 }
 
 void Shader::SetInt(const std::string& name, const int value) const
 {
+    DFM_PROFILE_FUNCTION();
     glUniform1i(glGetUniformLocation(m_id, name.c_str()), value);
 }
 
 void Shader::SetFloat(const std::string& name, const float value) const
 {
+    DFM_PROFILE_FUNCTION();
     glUniform1f(glGetUniformLocation(m_id, name.c_str()), value);
 }
 
 void Shader::SetVec3(const std::string& name, const float value1, const float value2, const float value3) const
 {
+    DFM_PROFILE_FUNCTION();
     glUniform3f(glGetUniformLocation(m_id, name.c_str()), value1, value2, value3);
 }
 
 void Shader::SetVec3(const std::string& name, const glm::vec3& value) const
 {
+    DFM_PROFILE_FUNCTION();
     glUniform3f(glGetUniformLocation(m_id, name.c_str()), value.x, value.y, value.z);
 }
 
 void Shader::SetMat4(const std::string& name, glm::mat4& value) const
 {
+    DFM_PROFILE_FUNCTION();
     glUniformMatrix4fv(glGetUniformLocation(m_id, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 
