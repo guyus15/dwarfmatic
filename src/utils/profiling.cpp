@@ -1,3 +1,7 @@
+/**
+ * \file profiling.cpp
+ */
+
 #include "profiling.h"
 
 #include <algorithm>
@@ -10,6 +14,11 @@ Instrumentor::Instrumentor()
 {
 }
 
+/**
+ * \brief Begins an instrumentation session.
+ * \param name The name of the instrumentation session.
+ * \param filepath The path of the file in which to save profiling results.
+ */
 void Instrumentor::BeginSession(const std::string& name, const std::string& filepath)
 {
 
@@ -18,6 +27,9 @@ void Instrumentor::BeginSession(const std::string& name, const std::string& file
     Get().m_current_session = new InstrumentationSession{ name };
 }
 
+/**
+ * \brief Ends the current instrumentation session.
+ */
 void Instrumentor::EndSession()
 {
     WriteFooter();
@@ -27,6 +39,10 @@ void Instrumentor::EndSession()
     Get().m_profile_count = 0;
 }
 
+/**
+ * \brief Writes a profile result to the profiling results file.
+ * \param result The profiling result to be written.
+ */
 void Instrumentor::WriteProfile(const ProfileResult& result)
 {
     if (Get().m_profile_count++ > 0)
@@ -50,12 +66,18 @@ void Instrumentor::WriteProfile(const ProfileResult& result)
     Get().m_output_stream.flush();
 }
 
+/**
+ * \brief Writes a profiling results header to the profiling results file.
+ */
 void Instrumentor::WriteHeader()
 {
     Get().m_output_stream << R"({"otherData": {},"traceEvents":[)";
     Get().m_output_stream.flush();
 }
 
+/**
+ * \brief Writes a profiling results footer to the profiling results file.
+ */
 void Instrumentor::WriteFooter()
 {
     Get().m_output_stream << "]}";
@@ -76,6 +98,9 @@ InstrumentationTimer::~InstrumentationTimer()
     }
 }
 
+/**
+ * \brief Stops the instrumentation timer, and writes the profiling result to the results file.
+ */
 void InstrumentationTimer::Stop()
 {
     const auto end_timepoint = std::chrono::high_resolution_clock::now();

@@ -1,3 +1,7 @@
+/**
+ * \file spot_light.cpp
+ */
+
 #include "lighting.h"
 #include "ubo.h"
 #include "utils/profiling.h"
@@ -16,11 +20,18 @@ SpotLight::SpotLight(SpotLightData data)
     Initialise();
 }
 
+/**
+ * \brief Gets the spot light data.
+ * \return The spot light data.
+ */
 SpotLightData& SpotLight::GetData()
 {
     return m_data;
 }
 
+/**
+ * \brief Initialises the spot light.
+ */
 void SpotLight::Initialise() const
 {
     DFM_PROFILE_FUNCTION();

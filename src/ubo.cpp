@@ -1,3 +1,7 @@
+/**
+ * \file ubo.cpp
+ */
+
 #include "ubo.h"
 #include "utils/profiling.h"
 
@@ -11,6 +15,11 @@ Ubo::Ubo()
 {
 }
 
+/**
+ * \brief Configures the UBO with the given block name and size.
+ * \param block_name The name of the UBO block.
+ * \param size The size of the UBO block.
+ */
 void Ubo::Configure(std::string block_name, const size_t size)
 {
     DFM_PROFILE_FUNCTION();
@@ -22,6 +31,10 @@ void Ubo::Configure(std::string block_name, const size_t size)
     s_binding_point++;
 }
 
+/**
+ * \brief Binds the UBO to the given shader.
+ * \param shader The shader to be bound with the UBO.
+ */
 void Ubo::BindShaderBlock(const Shader& shader)
 {
     DFM_PROFILE_FUNCTION();
@@ -33,6 +46,9 @@ void Ubo::BindShaderBlock(const Shader& shader)
     m_binded_shader_ids.push_back(shader_id);
 }
 
+/**
+ * \brief Creates a buffer object for the UBO.
+ */
 void Ubo::Create()
 {
     DFM_PROFILE_FUNCTION();
@@ -46,6 +62,12 @@ void Ubo::Create()
     glBindBufferRange(GL_UNIFORM_BUFFER, m_binding_point, m_id, 0, m_size);
 }
 
+/**
+ * \brief Sets a subrange of the UBO data.
+ * \param offset The offset of the UBO data subrange.
+ * \param size The size of the UBO data subrange
+ * \param data The data to be loaded into the subrange.
+ */
 void Ubo::SetSubData(const unsigned int offset, const size_t size, const void* data) const
 {
     DFM_PROFILE_FUNCTION();
@@ -55,31 +77,51 @@ void Ubo::SetSubData(const unsigned int offset, const size_t size, const void* d
     Unbind();
 }
 
+/**
+ * \brief Gets the ID of the UBO.
+ * \return The UBO's ID.
+ */
+unsigned int Ubo::GetId() const
+{
+    return m_id;
+}
+
+/**
+ * \brief Binds the UBO object.
+ */
 void Ubo::Bind() const
 {
     DFM_PROFILE_FUNCTION();
     glBindBuffer(GL_UNIFORM_BUFFER, m_id);
 }
 
+/**
+ * \brief Unbinds the UBO object.
+ */
 void Ubo::Unbind()
 {
     DFM_PROFILE_FUNCTION();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
-unsigned int Ubo::GetId() const
-{
-    return m_id;
-}
-
 UboManager UboManager::s_instance;
 
+/**
+ * \brief Registers the given UBO with the specified name in the manager.
+ * \param name The name used to identify the UBO.
+ * \param ubo The UBO to be managed.
+ */
 void UboManager::Register(const std::string& name, const Ubo& ubo)
 {
     DFM_PROFILE_FUNCTION();
     Get().m_registered_ubos[name] = ubo;
 }
 
+/**
+ * \brief Retrieves the \code Ubo object using the specified name.
+ * \param name The name used to identify the UBO.
+ * \return The retrieved UBO.
+ */
 Ubo& UboManager::Retrieve(const std::string& name)
 {
     DFM_PROFILE_FUNCTION();

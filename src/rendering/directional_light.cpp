@@ -1,3 +1,7 @@
+/**
+ * \file directional_light.cpp
+ */
+
 #include "lighting.h"
 #include "ubo.h"
 #include "utils/profiling.h"
@@ -10,11 +14,18 @@ DirectionalLight::DirectionalLight(DirectionalLightData data)
     Initialise();
 }
 
+/**
+ * \brief Gets the directional light data.
+ * \return The directional light data.
+ */
 DirectionalLightData& DirectionalLight::GetData()
 {
     return m_data;
 }
 
+/**
+ * \brief Initialises the directional light.
+ */
 void DirectionalLight::Initialise() const
 {
     DFM_PROFILE_FUNCTION();

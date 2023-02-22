@@ -1,3 +1,7 @@
+/**
+ * \file model.cpp
+ */
+
 #include "model.h"
 #include "utils/logging.h"
 #include "utils/profiling.h"
@@ -11,6 +15,10 @@
 
 static unsigned int TextureFromFile(const std::string& path, const std::string& directory);
 
+/**
+ * \brief Loads the model from the specified file path.
+ * \param path The path to the model file.
+ */
 void Model::Load(const std::string& path)
 {
     DFM_PROFILE_FUNCTION();
@@ -37,6 +45,10 @@ void Model::Load(const std::string& path)
     }
 }
 
+/**
+* \brief Draws the model with the specified shader.
+* \param shader The shader used to render the model.
+*/
 void Model::Draw(const Shader& shader) const
 {
     DFM_PROFILE_FUNCTION();
@@ -47,6 +59,11 @@ void Model::Draw(const Shader& shader) const
     }
 }
 
+/**
+ * \brief Processes the nodes of the model.
+ * \param node The node to be processed.
+ * \param scene The scene of the model.
+ */
 void Model::ProcessNode(const aiNode* node, const aiScene* scene)
 {
     DFM_PROFILE_FUNCTION();
@@ -65,6 +82,12 @@ void Model::ProcessNode(const aiNode* node, const aiScene* scene)
     }
 }
 
+/**
+ * \brief Processes the meshes of the model.
+ * \param mesh The mesh to be processed.
+ * \param scene The scene of the model.
+ * \return The processed mesh.
+ */
 Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
     DFM_PROFILE_FUNCTION();
@@ -139,6 +162,13 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     return Mesh{ vertices, indices, textures };
 }
 
+/**
+ * \brief Loads the textures of the material.
+ * \param material The material of the model.
+ * \param type The type of texture.
+ * \param type_name The name of the type of texture.
+ * \return The loaded textures.
+ */
 std::vector<MeshTexture> Model::LoadMaterialTextures(const aiMaterial* material, const aiTextureType type,
                                                      const std::string& type_name)
 {
@@ -178,11 +208,17 @@ std::vector<MeshTexture> Model::LoadMaterialTextures(const aiMaterial* material,
     return textures;
 }
 
+/**
+ * \brief Loads a 2D from the specified file path and directory.
+ * \param path The path to the texture from within the given directory.
+ * \param directory The directory where the texture resides.
+ * \return The texture ID.
+ */
 unsigned int TextureFromFile(const std::string& path, const std::string& directory)
 {
     DFM_PROFILE_FUNCTION();
-
-    // TODO: Convert texture usage to Texture2D implementation.
+    
+    // TODO (guy): Convert texture usage to Texture2D implementation.
 
     std::string filename = path;
     filename = directory + '/' + filename;
@@ -193,6 +229,7 @@ unsigned int TextureFromFile(const std::string& path, const std::string& directo
     int width, height, nr_components;
     unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nr_components, 0);
 
+    // If the image loaded successfully, bind the texture, set its data and generate mipmaps.
     if (data)
     {
         GLenum format = 0;

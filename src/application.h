@@ -1,3 +1,7 @@
+/**
+ * application.h
+ */
+
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
@@ -6,6 +10,9 @@
 
 #include <memory>
 
+/**
+ * \brief Represents the main entry point to the application.
+ */
 class Application
 {
 public:
@@ -18,9 +25,20 @@ public:
     Application& operator=(const Application&) = delete;
     Application& operator=(Application&&) noexcept = default;
 
+    /**
+     * \brief Performs application initialisation.
+     */
     void Initialise();
+
+    /**
+     * \brief Runs the application.
+     */
     void Run() const;
-    void Dispose();
+
+    /**
+     * \brief Performs a cleanup before application is shut down.
+     */
+    static void Dispose();
 
 private:
     std::shared_ptr<GlfwWindow> m_window;

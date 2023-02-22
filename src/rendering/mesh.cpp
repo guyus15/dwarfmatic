@@ -1,3 +1,7 @@
+/**
+ * \file mesh.cpp
+ */
+
 #include "mesh.h"
 #include "utils/profiling.h"
 
@@ -12,6 +16,10 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned> indices, std::vec
     SetupMesh();
 }
 
+/**
+ * \brief Draws the mesh using the given shader.
+ * \param shader The shader used to draw the mesh.
+ */
 void Mesh::Draw(const Shader& shader) const
 {
     DFM_PROFILE_FUNCTION();
@@ -57,6 +65,10 @@ void Mesh::Draw(const Shader& shader) const
     glActiveTexture(GL_TEXTURE0);
 }
 
+/**
+ * \brief Sets up the mesh by creating and binding a vertex array object (VAO), vertex buffer object (VBO),
+ * and element buffer object (EBO).
+ */
 void Mesh::SetupMesh()
 {
     DFM_PROFILE_FUNCTION();

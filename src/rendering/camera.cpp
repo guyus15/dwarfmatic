@@ -1,3 +1,7 @@
+/**
+ * \file camera.cpp
+ */
+
 #include "camera.h"
 #include "lighting.h"
 #include "ubo.h"
@@ -14,6 +18,10 @@ Camera::Camera(const glm::vec3& position, const glm::vec3& target_position)
     UpdateUboBlocks();
 }
 
+/**
+ * \brief Sets the position of the camera to the given position.
+ * \param position The new position.
+ */
 void Camera::SetPosition(const glm::vec3& position)
 {
     DFM_PROFILE_FUNCTION();
@@ -22,6 +30,10 @@ void Camera::SetPosition(const glm::vec3& position)
     UpdateUboBlocks();
 }
 
+/**
+ * \brief Sets the target position of the camera to the given position.
+ * \param target_position The new target position.
+ */
 void Camera::SetTarget(const glm::vec3& target_position)
 {
     DFM_PROFILE_FUNCTION();
@@ -30,11 +42,18 @@ void Camera::SetTarget(const glm::vec3& target_position)
     UpdateUboBlocks();
 }
 
+/**
+ * \brief Gets the current position of the camera.
+ * \return The camera's current position.
+ */
 glm::vec3 Camera::GetPosition() const
 {
     return m_position;
 }
 
+/**
+* \brief Updates the uniform buffer object (UBO) blocks for the camera.
+*/
 void Camera::UpdateUboBlocks() const
 {
     DFM_PROFILE_FUNCTION();

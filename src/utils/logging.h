@@ -1,3 +1,7 @@
+/**
+ * \file logging.h
+ */
+
 #ifndef LOGGING_H
 #define LOGGING_H
 
@@ -5,10 +9,21 @@
 
 #include "spdlog/spdlog.h"
 
+/**
+ * \brief Provides application logging functionality.
+ */
 class Logging
 {
 public:
+    /**
+     * \brief Intialises application logging.
+     */
     static void Initialise();
+
+    /**
+     * \brief Gets a reference to the application's core logger.
+     * \return A reference to the core logger.
+     */
     static std::shared_ptr<spdlog::logger>& GetCoreLogger();
 
 private:

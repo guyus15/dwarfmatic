@@ -1,3 +1,7 @@
+/**
+ * \file logging.cpp
+ */
+
 #include "logging.h"
 #include "utils/profiling.h"
 
@@ -5,6 +9,9 @@
 
 std::shared_ptr<spdlog::logger> Logging::s_core_logger;
 
+/**
+ * \brief Intialises application logging.
+ */
 void Logging::Initialise()
 {
     DFM_PROFILE_FUNCTION();
@@ -14,6 +21,10 @@ void Logging::Initialise()
     s_core_logger->set_level(spdlog::level::trace);
 }
 
+/**
+ * \brief Gets a reference to the application's core logger.
+ * \return A reference to the core logger.
+ */
 std::shared_ptr<spdlog::logger>& Logging::GetCoreLogger()
 {
     DFM_PROFILE_FUNCTION();

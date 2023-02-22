@@ -1,3 +1,7 @@
+/**
+ * application.cpp
+ */
+
 #include "application.h"
 #include "resource_manager.h"
 #include "ubo.h"
@@ -26,6 +30,9 @@ Application::~Application()
     DFM_PROFILE_END_SESSION();
 }
 
+/**
+ * \brief Performs application initialisation.
+ */
 void Application::Initialise()
 {
     DFM_PROFILE_FUNCTION();
@@ -77,6 +84,9 @@ void Application::Initialise()
     DFM_CORE_INFO("Application initialised.");
 }
 
+/**
+ * \brief Runs the application.
+ */
 void Application::Run() const
 {
     DFM_PROFILE_FUNCTION();
@@ -152,6 +162,9 @@ void Application::Run() const
     }
 }
 
+/**
+ * \brief Performs a cleanup before application is shut down.
+ */
 void Application::Dispose()
 {
     DFM_PROFILE_FUNCTION();
