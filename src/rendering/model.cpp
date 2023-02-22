@@ -217,7 +217,7 @@ std::vector<MeshTexture> Model::LoadMaterialTextures(const aiMaterial* material,
 unsigned int TextureFromFile(const std::string& path, const std::string& directory)
 {
     DFM_PROFILE_FUNCTION();
-
+    
     // TODO (guy): Convert texture usage to Texture2D implementation.
 
     std::string filename = path;
