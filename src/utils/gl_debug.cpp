@@ -1,8 +1,18 @@
+/**
+ * \file gl_debug.cpp
+ */
+
 #include "utils/gl_debug.h"
 #include "utils/logging.h"
 
 #include <string>
 
+/**
+ * \brief Checks to see if an OpenGL error has occured.
+ * \param file The name of the file in which the GL function is called.
+ * \param line The line in which the GL function is called.
+ * \return The type of GL error.
+ */
 GLenum GL_CheckError(const char* file, int line)
 {
     GLenum error_code;

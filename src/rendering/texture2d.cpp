@@ -1,3 +1,7 @@
+/**
+ * \file texture2d.cpp
+ */
+
 #include "texture2d.h"
 #include "utils/logging.h"
 #include "utils/profiling.h"
@@ -21,6 +25,12 @@ Texture2D::~Texture2D()
     glDeleteTextures(1, &m_id);
 }
 
+/**
+ * \brief Generates a 2D texture.
+ * \param width The width of the texture.
+ * \param height The height of the texture. 
+ * \param data The texture data.
+ */
 void Texture2D::Generate(const int width, const int height, const unsigned char* data)
 {
     DFM_PROFILE_FUNCTION();
@@ -52,6 +62,9 @@ void Texture2D::Generate(const int width, const int height, const unsigned char*
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+/**
+ * \brief Binds the texture for use.
+ */
 void Texture2D::Bind() const
 {
     DFM_PROFILE_FUNCTION();
@@ -59,6 +72,10 @@ void Texture2D::Bind() const
     glBindTexture(GL_TEXTURE_2D, m_id);
 }
 
+/**
+ * \brief Enables the texture's alpha channel.
+ * \param enable Enables the alpha channel when true, otherwise the alpha channel is disabled.
+ */
 void Texture2D::EnableAlpha(const bool enable)
 {
     DFM_PROFILE_FUNCTION();

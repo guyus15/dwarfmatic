@@ -1,3 +1,7 @@
+/**
+ * \file lighting.h
+ */
+
 #ifndef LIGHTING_H
 #define LIGHTING_H
 
@@ -8,6 +12,10 @@
 constexpr int MAX_NO_POINT_LIGHTS = 128;
 constexpr int MAX_NO_SPOT_LIGHTS = 128;
 
+/**
+ * \brief Represents various types of lighting.
+ * Follows the std140 standard to be used in the `Lighting` UBO.
+ */
 struct Lighting
 {
     glm::vec4 view_position;

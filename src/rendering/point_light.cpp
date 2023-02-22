@@ -1,3 +1,7 @@
+/**
+ * \file point_light.cpp
+ */
+
 #include "lighting.h"
 #include "ubo.h"
 #include "utils/profiling.h"
@@ -16,11 +20,18 @@ PointLight::PointLight(PointLightData data)
     Initialise();
 }
 
+/**
+* \brief Gets the point light data.
+* \return The point light data.
+*/
 PointLightData& PointLight::GetData()
 {
     return m_data;
 }
 
+/**
+ * \brief Initialises the point light.
+ */
 void PointLight::Initialise() const
 {
     DFM_PROFILE_FUNCTION();

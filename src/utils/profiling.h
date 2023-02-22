@@ -1,5 +1,9 @@
-#ifndef INSTRUMENTATION_H
-#define INSTRUMENTATION_H
+/**
+ * \file profiling.h
+ */
+
+#ifndef PROFILING_H
+#define PROFILING_H
 
 #include <chrono>
 #include <fstream>
@@ -28,10 +32,32 @@ public:
     Instrumentor& operator=(const Instrumentor&) = delete;
     Instrumentor& operator=(Instrumentor&&) noexcept = delete;
 
+    /**
+     * \brief Begins an instrumentation session.
+     * \param name The name of the instrumentation session.
+     * \param filepath The path of the file in which to save profiling results.
+     */
     static void BeginSession(const std::string& name, const std::string& filepath = DEFAULT_RESULTS_PATH);
+
+    /**
+     * \brief Ends the current instrumentation session.
+     */
     static void EndSession();
+
+    /**
+     * \brief Writes a profile result to the profiling results file.
+     * \param result The profiling result to be written.
+     */
     static void WriteProfile(const ProfileResult& result);
+
+    /**
+     * \brief Writes a profiling results header to the profiling results file.
+     */
     static void WriteHeader();
+
+    /**
+     * \brief Writes a profiling results footer to the profiling results file.
+     */
     static void WriteFooter();
 
 private:
@@ -58,6 +84,9 @@ public:
     InstrumentationTimer& operator=(const InstrumentationTimer&) = delete;
     InstrumentationTimer& operator=(InstrumentationTimer&&) noexcept = delete;
 
+    /**
+     * \brief Stops the instrumentation timer, and writes the profiling result to the results file.
+     */
     void Stop();
 
 private:
@@ -79,4 +108,4 @@ private:
 #define DFM_PROFILE_END_SESSION()
 #endif
 
-#endif // INSTRUMENTATION_H
+#endif // PROFILING_H
