@@ -29,6 +29,7 @@ target_sources(${PROJECT_NAME}
         src/application.cpp
         src/glfw_window.cpp
         src/ubo.cpp
+        src/ecs/uuid.cpp
         src/resource_manager.cpp
         src/rendering/camera.cpp
         src/rendering/camera_manager.cpp
