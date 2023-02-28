@@ -29,6 +29,7 @@ target_sources(${PROJECT_NAME}
         src/application.cpp
         src/glfw_window.cpp
         src/ubo.cpp
+        src/scene.cpp
         src/ecs/uuid.cpp
         src/resource_manager.cpp
         src/rendering/camera.cpp
@@ -56,6 +57,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/assimp/include
         thirdparty/stb/include
         thirdparty/spdlog/include
+        thirdparty/entt/src
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw ${GLFW_LIBRARIES})
