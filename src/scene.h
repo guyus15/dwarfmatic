@@ -5,16 +5,28 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "ecs/system_manager.h"
+
 #include "entt/entity/registry.hpp"
 
 #include <string>
 
 class Entity;
 
+/**
+ * \brief Represents a game scene used to manage currently existing entities.
+ */
 class Scene
 {
 public:
-    Scene() = default;
+    Scene();
+    ~Scene();
+
+    Scene(const Scene&) = delete;
+    Scene(Scene&&) noexcept = default;
+
+    Scene& operator=(const Scene&) = delete;
+    Scene& operator=(Scene&&) noexcept = default;
 
     /**
      * \brief Updates the scene using the given delta time.
@@ -37,8 +49,11 @@ public:
 
 private:
     entt::registry m_registry;
+    SystemManager m_system_manager;
 
     friend class Entity;
+    friend class RenderingSystem;
+    friend class LightingSystem;
 };
 
 #endif // SCENE_H

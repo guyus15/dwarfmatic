@@ -15,6 +15,7 @@
 
 #include <stdexcept>
 
+#include "scene.h"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
@@ -132,10 +133,15 @@ void Application::Run() const
     s_light_data.specular = { 1.0f, 1.0f, 1.0f, 0.0f };
     SpotLight spot_light{ s_light_data };
 
+    Scene scene;
+
     glEnable(GL_DEPTH_TEST);
 
     while (!m_window->ShouldClose())
     {
+        // TODO: Calculate the actual delta time and pass this as a parameter.
+        scene.Update(0.1);
+
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

@@ -31,6 +31,7 @@ target_sources(${PROJECT_NAME}
         src/ubo.cpp
         src/scene.cpp
         src/ecs/uuid.cpp
+        src/ecs/system_manager.cpp
         src/resource_manager.cpp
         src/rendering/camera.cpp
         src/rendering/camera_manager.cpp

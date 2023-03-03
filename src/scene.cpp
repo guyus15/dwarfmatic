@@ -1,13 +1,36 @@
+/**
+ * \file scene.cpp
+ */
+
 #include "scene.h"
 
 #include "ecs/entity.h"
 #include "ecs/components.h"
+#include "ecs/system_manager.h"
+#include "ecs/systems/rendering_system.h"
+#include "ecs/systems/lighting_system.h"
 
 #include "utils/profiling.h"
 
-void Scene::Update(double dt)
+Scene::Scene()
+{
+    m_system_manager.RegisterSystem<RenderingSystem>(this);
+}
+
+Scene::~Scene()
+{
+    m_system_manager.RemoveSystem<RenderingSystem>();
+}
+
+/**
+ * \brief Updates the scene using the given delta time.
+ * \param dt The delta time.
+ */
+void Scene::Update(const double dt)
 {
     DFM_PROFILE_FUNCTION();
+
+    m_system_manager.Update(dt);
 }
 
 /**
@@ -21,6 +44,9 @@ Entity Scene::CreateEntity(const std::string& name)
 
     Entity entity{ m_registry.create(), this };
     entity.AddComponent<IdComponent>();
+    auto [tag_name] = entity.AddComponent<TagComponent>();
+    tag_name = name;
+    entity.AddComponent<TransformComponent>();
 
     return entity;
 }
