@@ -5,17 +5,22 @@
 #include "application.h"
 #include "resource_manager.h"
 #include "ubo.h"
+#include "scene.h"
+
 #include "rendering/camera.h"
 #include "rendering/camera_manager.h"
 #include "rendering/model.h"
 #include "rendering/lighting.h"
 #include "rendering/shader.h"
+
+#include "ecs/entity.h"
+
 #include "utils/logging.h"
 #include "utils/profiling.h"
 
 #include <stdexcept>
 
-#include "glm/ext/matrix_transform.hpp"
+#include "ecs/systems/lighting_system.h"
 #include "glm/gtc/type_ptr.hpp"
 
 Application::Application()
@@ -100,37 +105,77 @@ void Application::Run() const
     Model ball_model{};
     ball_model.Load("resources/models/ball/ball.fbx");
 
-    Camera camera{ { 0.0f, 0.0f, 7.0f }, { 0.0f, 0.0f, 0.0f } };
+    Scene scene;
 
-    PointLightData light_data{};
-    light_data.position = { -0.5f, 0.0f, 2.0f, 0.0f };
-    light_data.constant = 1.0f;
-    light_data.linear = 0.14f;
-    light_data.quadratic = 0.07f;
-    light_data.ambient = { 0.3f, 0.3f, 0.3f, 0.0f };
-    light_data.diffuse = { 0.8f, 0.8f, 0.8f, 0.0f, };
-    light_data.specular = { 1.0f, 1.0f, 1.0f, 0.0f };
-    PointLight light{ light_data };
+    Entity cube_object = scene.CreateEntity("Cube 1");
+    cube_object.AddComponent<MeshComponent>(cube_model);
+    cube_object.AddComponent<ShaderComponent>(shader);
+    auto& cube_object_transform = cube_object.GetComponent<TransformComponent>();
+    cube_object_transform.position = { -1.5f, 0.0f, 0.0f };
 
-    DirectionalLightData d_light_data{};
-    d_light_data.direction = { 3.0f, 0.0f, 1.0f, 0.0f };
-    d_light_data.ambient = { 0.1f, 0.1f, 0.1f, 0.0f };
-    d_light_data.diffuse = { 0.3f, 0.3f, 0.3f, 0.0f };
-    d_light_data.specular = { 0.2f, 0.2f, 0.2f, 0.0f, };
-    DirectionalLight directional_light{ d_light_data };
+    Entity cube_object2 = scene.CreateEntity("Cube 2");
+    cube_object2.AddComponent<MeshComponent>(cube_model);
+    cube_object2.AddComponent<ShaderComponent>(shader);
+    auto& cube_object2_transform = cube_object2.GetComponent<TransformComponent>();
+    cube_object2_transform.position = { 0.0f, 0.0f, 5.0f };
 
-    SpotLightData s_light_data{};
-    s_light_data.position = { 0.0f, 0.0f, 5.0f, 0.0f };
-    s_light_data.direction = { 0.0f, 0.0f, 1.0f, 0.0f };
-    s_light_data.constant = 1.0f;
-    s_light_data.linear = 0.14f;
-    s_light_data.quadratic = 0.07f;
-    s_light_data.inner_cut_off = glm::cos(glm::radians(20.0f));
-    s_light_data.outer_cut_off = glm::cos(glm::radians(25.0f));
-    s_light_data.ambient = { 0.3f, 0.3f, 0.3f, 0.0f };
-    s_light_data.diffuse = { 0.8f, 0.8f, 0.8f, 0.0f, };
-    s_light_data.specular = { 1.0f, 1.0f, 1.0f, 0.0f };
-    SpotLight spot_light{ s_light_data };
+    Entity ball_object = scene.CreateEntity("Ball 1");
+    ball_object.AddComponent<MeshComponent>(ball_model);
+    ball_object.AddComponent<ShaderComponent>(shader);
+    auto& ball_object_transform = ball_object.GetComponent<TransformComponent>();
+    ball_object_transform.position = { 1.5f, 0.0f, 0.0f };
+
+#define POINT_LIGHT 1
+#define DIRECTIONAL_LIGHT 0
+#define SPOT_LIGHT 0
+
+#if POINT_LIGHT
+    Entity point_light_object = scene.CreateEntity("Point Light");
+    point_light_object.AddComponent<MeshComponent>(cube_model);
+    point_light_object.AddComponent<ShaderComponent>(shader);
+    auto& point_light_component = point_light_object.AddComponent<LightComponent>();
+    point_light_component.type = LightComponent::Type::Point;
+    point_light_component.constant = 1.0f;
+    point_light_component.linear = 0.14f;
+    point_light_component.quadratic = 0.07f;
+    point_light_component.ambient = { 0.3f, 0.3f, 0.3f };
+    point_light_component.diffuse = { 0.8f, 0.8f, 0.8f };
+    point_light_component.specular = { 1.0f, 1.0f, 1.0f };
+    auto& point_light_object_transform = point_light_object.GetComponent<TransformComponent>();
+    point_light_object_transform.position = { 0.0f, 0.0f, -3.0f };
+    point_light_object_transform.scale = { 0.1f, 0.1f, 0.1f };
+#endif
+
+#if DIRECTIONAL_LIGHT
+    Entity directional_light_object = scene.CreateEntity("Directional Light");
+    auto& directional_light_component = directional_light_object.AddComponent<LightComponent>();
+    directional_light_component.type = LightComponent::Type::Directional;
+    directional_light_component.ambient = { 0.1f, 0.1f, 0.1f };
+    directional_light_component.diffuse = { 0.3f, 0.3f, 0.3f };
+    directional_light_component.specular = { 0.2f, 0.2f, 0.2f };
+    auto& directional_light_transform = directional_light_object.GetComponent<TransformComponent>();
+    directional_light_transform.rotation = { 0.0f, 45.0f, 0.0f };
+#endif
+
+#if SPOT_LIGHT
+    Entity spot_light_object = scene.CreateEntity("Spot Light");
+    spot_light_object.AddComponent<MeshComponent>(cube_model);
+    spot_light_object.AddComponent<ShaderComponent>(shader);
+    auto& spot_light_component = spot_light_object.AddComponent<LightComponent>();
+    spot_light_component.type = LightComponent::Type::Spot;
+    spot_light_component.constant = 1.0f;
+    spot_light_component.linear = 0.14f;
+    spot_light_component.quadratic = 0.07f;
+    spot_light_component.inner_angle = 20.0f;
+    spot_light_component.outer_angle = 25.0f;
+    spot_light_component.ambient = { 0.3f, 0.3f, 0.3f };
+    spot_light_component.diffuse = { 0.8f, 0.8f, 0.8f };
+    spot_light_component.specular = { 1.0f, 1.0f, 1.0f };
+    auto& spot_light_object_transform = spot_light_object.GetComponent<TransformComponent>();
+    spot_light_object_transform.position = { 0.0f, 0.0f, -5.0f };
+    spot_light_object_transform.rotation = { 0.0f, 0.0f, 0.0f };
+    spot_light_object_transform.scale = { 0.1f, 0.1f, 0.1f };
+#endif
 
     glEnable(GL_DEPTH_TEST);
 
@@ -139,23 +184,13 @@ void Application::Run() const
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::mat4 model{ 1.0f };
-        model = glm::translate(model, glm::vec3{ -1.5f, 0.0f, 0.0f });
-        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
-        shader.SetMat4("model", model);
-        cube_model.Draw(shader);
+        // TODO: Calculate the actual delta time and pass this as a parameter.
+        scene.Update(0.1);
 
-        model = glm::mat4{ 1.0f };
-        model = glm::translate(model, glm::vec3{ 0.0f, 0.0f, -5.0f });
-        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 15.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
-        shader.SetMat4("model", model);
-        cube_model.Draw(shader);
-
-        model = glm::mat4{ 1.0f };
-        model = model = glm::translate(model, glm::vec3{ 1.5f, 0.0f, 0.0f });
-        model = glm::rotate(model, glm::radians(-static_cast<float>(glfwGetTime()) * 10.0f), glm::vec3{ 0.0f, 1.0f, 0.0f });
-        shader.SetMat4("model", model);
-        ball_model.Draw(shader);
+        // Update entities
+        cube_object_transform.rotation = { 0.0f, static_cast<float>(glfwGetTime()) * 10.0f, 0.0f };
+        point_light_object_transform.position = { sin(static_cast<float>(glfwGetTime())) * 5.0f, 0.0f, cos(static_cast<float>(glfwGetTime())) * 5.0f };
+        scene.UpdateLightSources(LightUpdateType::All);
 
         glfwPollEvents();
         m_window->SwapBuffers();

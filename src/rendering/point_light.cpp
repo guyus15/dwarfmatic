@@ -30,6 +30,15 @@ PointLightData& PointLight::GetData()
 }
 
 /**
+* \brief Gets the index of the point light.
+* \return The point light's index.
+*/
+unsigned int PointLight::GetIndex() const
+{
+    return m_index;
+}
+
+/**
  * \brief Initialises the point light.
  */
 void PointLight::Initialise() const

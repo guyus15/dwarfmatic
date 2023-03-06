@@ -42,6 +42,12 @@ public:
      */
     [[nodiscard]] SpotLightData& GetData();
 
+    /**
+     * \brief Gets the index of the spot light.
+     * \return The spot light's index.
+     */
+    [[nodiscard]] unsigned int GetIndex() const;
+
 private:
     SpotLightData m_data;
     unsigned int m_index;

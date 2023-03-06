@@ -30,6 +30,15 @@ SpotLightData& SpotLight::GetData()
 }
 
 /**
+ * \brief Gets the index of the spot light.
+ * \return The spot light's index.
+ */
+unsigned int SpotLight::GetIndex() const
+{
+    return m_index;
+}
+
+/**
  * \brief Initialises the spot light.
  */
 void SpotLight::Initialise() const
