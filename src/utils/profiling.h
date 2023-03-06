@@ -95,15 +95,14 @@ private:
     bool m_stopped;
 };
 
-#define DFM_PROFILING 1
-#if DFM_PROFILING
+#ifdef DFM_PROFILING
 #define DFM_PROFILE_SCOPE(name) InstrumentationTimer timer##__LINE__{ name }
 #define DFM_PROFILE_FUNCTION() DFM_PROFILE_SCOPE(__FUNCSIG__)
 #define DFM_PROFILE_BEGIN_SESSION(name) Instrumentor::BeginSession(name)
 #define DFM_PROFILE_END_SESSION() Instrumentor::EndSession()
 #else
 #define DFM_PROFILE_SCOPE(name)
-#define DFM_PROFILE_FUNCTION(name)
+#define DFM_PROFILE_FUNCTION()
 #define DFM_PROFILE_BEGIN_SESSION(name)
 #define DFM_PROFILE_END_SESSION()
 #endif
