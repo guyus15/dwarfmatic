@@ -5,7 +5,7 @@
 #include "camera_manager.h"
 #include "utils/profiling.h"
 
-constexpr glm::vec3 DEFAULT_CAMERA_POSITION{ 0.0f, 0.0f, 10.0f };
+constexpr glm::vec3 DEFAULT_CAMERA_POSITION{ 0.0f, 0.0f, -10.0f };
 constexpr glm::vec3 DEFAULT_CAMERA_TARGET{ 0.0f, 0.0f, 0.0f };
 
 CameraManager CameraManager::s_instance;

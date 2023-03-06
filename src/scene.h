@@ -11,6 +11,7 @@
 
 #include <string>
 
+enum class LightUpdateType;
 class Entity;
 
 /**
@@ -33,6 +34,12 @@ public:
      * \param dt The delta time.
      */
     void Update(double dt);
+
+    /**
+     * \brief Updates the given type of light sources within the scene via the lighting system.
+     * \param update_type The type of light source to update.
+     */
+    void UpdateLightSources(LightUpdateType update_type);
 
     /**
      * \brief Creates an entity in the scene with the given name and returns a copy.

@@ -15,11 +15,13 @@
 Scene::Scene()
 {
     m_system_manager.RegisterSystem<RenderingSystem>(this);
+    m_system_manager.RegisterSystem<LightingSystem>(this);
 }
 
 Scene::~Scene()
 {
     m_system_manager.RemoveSystem<RenderingSystem>();
+    m_system_manager.RemoveSystem<LightingSystem>();
 }
 
 /**
@@ -34,6 +36,23 @@ void Scene::Update(const double dt)
 }
 
 /**
+ * \brief Updates the given type of light sources within the scene via the lighting system.
+ * \param update_type The type of light source to update.
+ */
+void Scene::UpdateLightSources(const LightUpdateType update_type)
+{
+    try
+    {
+        auto& lighting_system = m_system_manager.GetSystem<LightingSystem>();
+        lighting_system.UpdateLightSources(update_type);
+    }
+    catch (std::out_of_range& e)
+    {
+        DFM_CORE_ERROR("{0}", e.what());
+    }
+}
+
+/**
  * \brief Creates an entity in the scene with the given name and returns a copy.
  * \param name The name of the entity.
  * \return A copy of the entity.
@@ -44,9 +63,12 @@ Entity Scene::CreateEntity(const std::string& name)
 
     Entity entity{ m_registry.create(), this };
     entity.AddComponent<IdComponent>();
-    auto [tag_name] = entity.AddComponent<TagComponent>();
+    auto& [tag_name] = entity.AddComponent<TagComponent>();
     tag_name = name;
-    entity.AddComponent<TransformComponent>();
+    auto& [position, rotation, scale] = entity.AddComponent<TransformComponent>();
+    position = { 0.0f, 0.0f, 0.0f };
+    rotation = { 0.0f, 0.0f, 0.0f };
+    scale = { 1.0f, 1.0f, 1.0f };
 
     return entity;
 }

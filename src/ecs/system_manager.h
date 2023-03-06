@@ -34,7 +34,6 @@ public:
     template <typename T>
     void RegisterSystem(Scene* scene)
     {
-        DFM_CORE_TRACE("Registering system {0} to system manager.", typeid(T).name());
         const std::shared_ptr<ISystem> type_ptr = std::make_shared<T>(scene);
         m_registry[typeid(T).hash_code()] = type_ptr;
     }
@@ -46,8 +45,18 @@ public:
     template <typename T>
     void RemoveSystem()
     {
-        DFM_CORE_TRACE("Removing system {} from system manager.", typeid(T).name());
         m_registry.erase(typeid(T).hash_code());
+    }
+
+    /**
+     * \brief Gets a reference to the given system in the registry.
+     * \tparam T The type of system to retrieve.
+     * \return The retrieved system.
+     */
+    template <typename T>
+    T& GetSystem()
+    {
+        return *(static_cast<T*>(m_registry.at(typeid(T).hash_code()).get()));
     }
 
 private:

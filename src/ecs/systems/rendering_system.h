@@ -12,6 +12,9 @@
 
 #include "glm/ext/matrix_transform.hpp"
 
+ /**
+  * \brief A system used to handle updating renderable components.
+  */
 class RenderingSystem final : public ISystem
 {
 public:
@@ -35,9 +38,9 @@ public:
 
             glm::mat4 model_mat{ 1.0f };
             model_mat = glm::translate(model_mat, position);
-            model_mat = glm::rotate(model_mat, rotation.x, glm::vec3{ 1.0f, 0.0f, 0.0f });
-            model_mat = glm::rotate(model_mat, rotation.y, glm::vec3{ 1.0f, 0.0f, 0.0f });
-            model_mat = glm::rotate(model_mat, rotation.z, glm::vec3{ 1.0f, 0.0f, 0.0f });
+            model_mat = glm::rotate(model_mat, glm::radians(rotation.x), glm::vec3{ 1.0f, 0.0f, 0.0f });
+            model_mat = glm::rotate(model_mat, glm::radians(rotation.y), glm::vec3{ 0.0f, 1.0f, 0.0f });
+            model_mat = glm::rotate(model_mat, glm::radians(rotation.z), glm::vec3{ 0.0f, 0.0f, 1.0f });
             model_mat = glm::scale(model_mat, scale);
 
             shader.Use();

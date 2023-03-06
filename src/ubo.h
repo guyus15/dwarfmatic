@@ -11,6 +11,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 /**
  * \brief A wrapper for a GL uniform buffer object.

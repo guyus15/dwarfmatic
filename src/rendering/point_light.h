@@ -37,6 +37,12 @@ public:
      */
     [[nodiscard]] PointLightData& GetData();
 
+    /**
+     * \brief Gets the index of the point light.
+     * \return The point light's index.
+     */
+    [[nodiscard]] unsigned int GetIndex() const;
+
 private:
     PointLightData m_data;
     unsigned int m_index;

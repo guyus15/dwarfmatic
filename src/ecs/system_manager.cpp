@@ -10,7 +10,7 @@
   */
 void SystemManager::Update(const double dt)
 {
-    for (const auto& [key, value] : m_registry)
+    for (const auto& [_, value] : m_registry)
     {
         value.get()->Update(dt);
     }
