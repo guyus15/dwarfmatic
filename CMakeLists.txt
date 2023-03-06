@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY out)
 
+option(ENABLE_PROFILING "Generate profiling results for the application" OFF)
+
 # glfw
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "GLFW build documentation" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "GLFW build tests" FORCE)
@@ -63,6 +65,10 @@ target_include_directories(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} PRIVATE assimp)
+
+if (ENABLE_PROFILING)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE DFM_PROFILING)
+endif()
 
 add_custom_target(copy_resources ALL
     COMMAND ${CMAKE_COMMAND} -E copy_directory
